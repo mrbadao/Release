@@ -1,0 +1,57 @@
+<!--[if lt IE 7]>
+<p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser
+    today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better
+    experience this site.</p>
+<![endif]-->
+
+
+<div class="top-bar">
+    <div class="container">
+        <div class="row">
+
+            <div class="span12 menu clearfix">
+                <ul class="clearfix rr">
+                    <li>
+                        <a href="/site/thanh-toan.html">
+                            <span class="ir icon checkout"></span>
+                            <span>Thanh toán</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<header class="container">
+    <div class="row">
+
+        <div class="span3 logo-wrapper">
+            <a href="/site/" class="logo">
+                <span class="icon ir">Owl Food</span>
+
+                <h1>Owl Food Shop</h1>
+            </a>
+        </div>
+
+        <!--top cart-->
+        <tal:block tal:content="structure php:this.widget('application.widgets.TopCartWidget',array(),true)"/>
+
+    </div>
+
+    <!--navi bar-->
+    <div class="row main-menu-wrapper">
+        <div class="span9">
+            <tal:block tal:content="structure php:this.widget('application.widgets.NaviBar',menu,true)"/>
+        </div>
+        <div class="span3">
+            <form method="post" action="/site/tim-kiem/" id="frmSearch" onsubmit="return checkSearchKey();">
+                <input id="search_key" name="search[name]" type="text" class="search-box" placeholder="Tìm kiếm sản phẩm..." value=""/>
+            </form>
+        </div>
+    </div>
+</header>
+<hr/>

@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">OrderApp</string>
+
+    <string name="app_title">Đặt hàng thông minh</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_search">Tìm kiếm</string>
+
+    <string name="action_settings">Cài đặt</string>
+    <string name="title_activity_product">ProductActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_cart_add">Thêm vào giỏ</string>
+    <string name="action_delete_order">Xóa đơn hàng</string>
+
+    <string name="title_activity_order_detail">OrderDetailActivity</string>
+</resources>

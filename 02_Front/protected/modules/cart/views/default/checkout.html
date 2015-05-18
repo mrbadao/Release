@@ -1,0 +1,180 @@
+<div class="container breadcrumb-wrapper">
+    <div class="row">
+        <div class="span12 breadcrumb" metal:use-macro="${this/viewPath}/${this/id}/breadcrumb.html/${this/action/id}"></div>
+    </div>
+</div>
+
+<div role="main" class="container checkout">
+    <div class="row">
+
+        <div class="span3 progress">
+            <h3>Quy trình thanh toán</h3>
+            <ul class="rr">
+                <li>
+                    <a href="#checkout-step-1" class="active" id="progress-1">Thông tin</a>
+                </li>
+                <li>
+                    <a href="#checkout-step-2" id="progress-2">Xác định vị trí</a>
+                </li>
+                <li>
+                    <a href="#checkout-step-3" id="progress-3">Thanh toán</a>
+                </li>
+                <li>
+                    <a href="#checkout-step-4" id="progress-4">Thanh toán</a>
+                </li>
+            </ul>
+        </div>
+
+        <form action="" method="post" id="formCheckout">
+            <div class="span9 checkout-list">
+                <h3>Thanh toán</h3>
+                <hr/>
+
+                <h5 tal:condition="hasError/flg" tal:content="hasError/msg" style="text-align: center; color: #ED1C24 !important;">Không tim thây kết quả nào.</h5>
+                <h5 tal:condition="orderStatus/flg" tal:content="orderStatus/msg" style="text-align: center; color: #ED1C24 !important;">Không tim thây kết quả nào.</h5>
+
+                <ol class="rr subProgress" tal:condition="php: hasError['flg']">
+                    <li class="current" id="checkout-step-1">
+                        <h6>Thông tin</h6>
+                        <div class="row">
+                            <div class="span9 content-wrapper clearfix">
+                                <div class="left-col">
+
+                                    <h6>Họ tên và số điện thoại</h6>
+
+                                    <p>
+                                        Cần thiết để xác định bạn là ai.
+                                    </p>
+
+                                </div>
+                                <div class="right-col">
+                                    <ul class="rr">
+                                        <li>
+                                            <label>
+                                                <input type="text" name="name" placeholder="Tên của bạn..."/>
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <input type="tel" name="email"
+                                                       placeholder="email của bạn..."/>
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <input type="tel" name="phone"
+                                                       placeholder="Số điện thoại liên lạc..."/>
+                                            </label>
+                                        </li>
+                                    </ul>
+
+                                    <a href="javascript:checkoutMoveStep('#checkout-step-1', '#checkout-step-2', '#progress-2')" class="btn secondary">
+                                        <span class="gradient">Tiếp tục</span>
+                                    </a>
+
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li id="checkout-step-2">
+                        <h6>Xác định vị trí</h6>
+
+                        <div class="row">
+                            <div class="span9 content-wrapper">
+                                <div class="left-col">
+
+                                    <h6>Địa chỉ giao hàng</h6>
+
+                                    <p>
+                                        Hãy cho chúng tôi biết địa chỉ của bạn.
+                                    </p>
+
+                                </div>
+                                <div class="right-col">
+                                    <ul class="rr">
+                                        <li>
+                                            <label>
+                                                <input type="text" name="address"
+                                                       placeholder="Địa chỉ giao hàng..."/>
+                                            </label>
+                                        </li>
+                                    </ul>
+
+                                    <a href="javascript:checkoutMoveStep('#checkout-step-2', '#checkout-step-3', '#progress-3')" class="btn secondary">
+                                        <span class="gradient">Tiếp tục</span>
+                                    </a>
+
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li id="checkout-step-3">
+                        <h6>Nội dung</h6>
+
+                        <div class="row">
+                            <div class="span9 content-wrapper">
+                                <div class="left-col">
+
+                                    <h6>Thông tin đơn hàng</h6>
+
+                                    <p>
+                                        Bạn sẽ đặt hàng với các thông tin sau.<br/>
+                                        Vui lòng kiểm tra thậ kỹ trước khi gữi để tránh nhầm lẫn.
+                                    </p>
+
+                                </div>
+                                <div class="right-col">
+                                    <ul class="rr">
+                                        <li>
+                                            <label style="color: #000000">Tên người nhận: </label>
+                                            <label id="name">Chưa xác nhận.</label>
+                                        </li>
+                                        <li>
+                                            <label style="color: #000000">Email người nhận: </label>
+                                            <label id="email">Chưa xác nhận.</label>
+                                        </li>
+                                        <li>
+                                            <label style="color: #000000">Số điện thoại: </label>
+                                            <label id="phone">Chưa xác nhận.</label>
+                                        </li>
+                                        <li>
+                                            <label style="color: #000000">Địa chỉ: </label>
+                                            <label id="address">Chưa xác nhận.</label>
+                                        </li>
+                                    </ul>
+
+                                    <a href="javascript:checkoutMoveStep('#checkout-step-3', '#checkout-step-4', '#progress-4')" class="btn secondary">
+                                        <span class="gradient">Tiếp tục</span>
+                                    </a>
+
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="last" id="checkout-step-4">
+                        <h6>Thanh toán</h6>
+
+                        <div class="row">
+                            <div class="span9 content-wrapper">
+                                <div class="left-col">
+
+                                    <h6>Gữi đơn hàng</h6>
+
+                                    <p>
+                                        Bằng việc nhấn vào nút [Hoàn thành] bạn đã hoàn thành quy trình thanh toán của chúng tôi.
+                                    </p>
+
+                                </div>
+                                <div class="right-col">
+                                    <a href="javascript:submitCheckout()" class="btn secondary">
+                                        <span class="gradient">Hoàn thành</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ol>
+            </div>
+        </form>
+    </div>
+</div>
