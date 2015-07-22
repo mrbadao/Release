@@ -1,0 +1,195 @@
+<script>
+    var isEdit = true;
+    var saleoffID = "${ContentSaleoff/id|''}";
+    if(saleoffID != '' ) isEdit = false;
+    <![CDATA[
+
+
+    jQuery(function() {
+        $('#enddate').datetimepicker({dateFormat: 'yyyy-mm-dd HH:MM'});
+        if(isEdit) {
+            $('#startdate').datetimepicker({dateFormat: 'yyyy-mm-dd HH:MM'});
+            $(".datetime").on("change keyup", function () {
+                $(this).datetimepicker({dateFormat: 'yyyy-mm-dd HH:MM'});
+            });
+        }
+    });
+
+]]>
+</script>
+
+<form id="frmSaleOff" method="post" action="" enctype="multipart/form-data">
+    <div tal:condition="not:exists:contentProduct/id">
+        <h1>Thêm khuyến mãi</h1>
+        <article>
+            <p>
+                Khuyến mãi sẽ được thêm.<br/>
+                Sau khi nhập các thông tin cần thiết, bạn hãy click vào nút Save.
+            </p>
+        </article>
+    </div>
+    <div tal:condition="exists:contentProduct/id">
+        <h1>Chỉnh sữa khuyến mãi</h1>
+        <article>
+            <p>
+                Khuyến mãi sẽ được chỉnh sữa<br/>
+                Sau khi nhập các thông tin cần thiết, bạn hãy click vào nút Save.
+            </p>
+        </article>
+    </div>
+    <aside>
+        <p>※<span class="txtWarning">*</span>Hãy nhập đầy đủ thông tin.</p>
+    </aside>
+
+    <div class="columnContainer">
+        <div class="tabBox">
+            <input type="hidden" name="saleoff[id]" value="${ContentSaleoff/id|''}"/>
+
+            <div class="mBoxitem_table">
+                <table cellpadding="0" cellspacing="0" border="0" class="tableTate">
+                    <tr>
+                        <th>Tên khuyến mãi&nbsp;<span class="txtWarning">*</span></th>
+                        <td>
+                            <tal:block tal:content="structure php:CHtml::error(ContentSaleoff,'name')"/>
+                            <input type="text" name="saleoff[name]" maxlength="100" value="${ContentSaleoff/name|''}"  class="txtbox title txt_en" style="width:200px;"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Phần trăm khuyễn mãi&nbsp;<span class="txtWarning">*</span></th>
+                        <td>
+                            <tal:block tal:content="structure php:CHtml::error(ContentSaleoff,'percent')"/>
+                            <input tal:attributes="readonly php:ContentSaleoff['id'] ? 'readonly' : '' " type="text" name="saleoff[percent]" maxlength="100" value="${ContentSaleoff/percent|''}"  class="txtbox title txt_en" style="width:50px;"/>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="mBoxitem_table">
+                <table cellpadding="0" cellspacing="0" border="0" class="tableTate">
+                    <tr>
+                        <th>Ngày bắt đầu&nbsp;<span class="txtWarning">*</span></th>
+                        <td>
+                            <tal:block tal:content="structure php:CHtml::error(ContentSaleoff,'startdate')"/>
+                            <input tal:attributes="readonly php:ContentSaleoff['id'] ? 'readonly' : '' "  id="startdate" value="${ContentSaleoff/startdate|''}" name="saleoff[startdate]" class="txtbox datetime" type="text" onKeyDown="ignoreESC(this,event.keyCode)" onFocus="toggleColor(this)" onBlur="toggleColor(this)" style="width: 100px;"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Ngày kết thúc&nbsp;<span class="txtWarning">*</span></th>
+                        <td>
+                            <tal:block tal:content="structure php:CHtml::error(ContentSaleoff,'enddate')"/>
+                            <input id="enddate" value="${ContentSaleoff/enddate|''}" name="saleoff[enddate]" class="txtbox datetime" type="text" onKeyDown="ignoreESC(this,event.keyCode)" onFocus="toggleColor(this)" onBlur="toggleColor(this)" style="width: 100px;"/>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="mBoxitem_table">
+                <table cellpadding="0" cellspacing="0" border="0" class="tableTate">
+                    <tr>
+                        <th>Chọn sản phẩm&nbsp;</th>
+                        <td>
+                            <p tal:condition="proMsg" class="txtWarning">Danh sách khuyến mĩa không đượng trống.</p>
+                            <div style="width: 300px; float: left;">
+                                <div style="width: 100%; float: left;">
+                                    <select id="categories" style="width: 200px;">
+                                        <option value="" catid="">Chọn danh mục</option>
+                                        <option tal:repeat="cat contentCats" value="${cat/id}">${cat/name}</option>
+                                    </select>
+                                    <button type="button" class="btnSmall themeNormal" id="btnChooseCategory" style="margin-left: 5px;">Chọn</button>
+                                </div>
+                                <div style="width: 100%; float: left;">
+                                    <select id="selectProduct" multiple="multiple" size="10" style="width: 200px;"></select>
+                                    <button type="button" class="btnSmall themeNormal" id="btnAdd" style="margin-left: 8px; margin-top: 10px; position: absolute;">Thêm</button>
+                                    <button type="button" class="btnSmall themeNormal" id="btnDel" style="margin-left: 8px; margin-top: 50px; position: absolute;">Xóa</button>
+                                </div>
+                            </div>
+
+                            <div style="width:350px; float: left;">
+                                <tal:block tal:repeat="item itemList">
+                                    <tal:block tal:content="structure php:CHtml::error(item,'product_id')"/>
+                                </tal:block>
+
+                                <select name="productid[]" id="listProduct" multiple="multiple" size="12" style="width: 200px;">
+                                    <option tal:repeat="item itemList" value="${item/product_id|''}" catid="${item/category_id|''}">
+                                        <tal:block tal:define="product php:Helpers::getProduct(item['product_id'])" tal:content="product/name|''"/>
+                                    </option>
+                                </select>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="BtnArea">
+        <div class="BtnAreaitem">
+            <tal:block class="BtnAreaitem" tal:content="structure php:CHtml::submitButton('Save',array('name' => 'commit','class'=>'btnMiddle themeNormal'))"/>
+            <input class="btnMiddle themeNormal" type="button" title="Cancel" value="Cancel" onclick="window.location.href='/admin/saleoff/';"/>
+        </div>
+    </div>
+</form>
+
+<script>
+    <![CDATA[
+    $(document).ready(function(){
+        var eleProducts = $('#selectProduct');
+        var eleList = $('#listProduct');
+
+        eleProducts.addOption = function(val, text, cateId){
+            $(this).append("<option value='"+val+"' catid='"+cateId+"'>"+text+"</option>");
+        };
+
+        $('#btnChooseCategory').bind('click', function() {
+            var catId = $("#categories").val();
+
+            if (!isNaN(catId)) {
+                $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    url: "/admin/saleoff/getpros",
+                    dataType: "json",
+                    data: {"id":catId},
+                    success: function(data) {
+                        console.log(data);
+                        if(data !=null){
+                            eleProducts.find('option').remove();
+                            for(var i=0; i< data.length; i++){
+                                console.log(data[i]);
+                                eleProducts.addOption(data[i].id, data[i].name, catId);
+                            }
+                        }
+                    }
+                });
+            }
+        });
+
+        $('#btnAdd').bind('click', function(){
+            eleProducts.find('option:selected').each(function(){
+                if( eleList.find('option[value="'+ $(this).val() +'"]').length < 1) eleList.append($(this));
+            });
+        });
+
+        $('#btnDel').bind('click', function(){
+            eleList.find('option:selected').each(function(){
+                if($(this).attr('catid') == $("#categories").val()) {
+                    if (eleProducts.find('option[value="' + $(this).val() + '"]').length < 1) eleProducts.append($(this));
+                }else
+                    $(this).remove();
+            });
+        });
+
+        $('#frmSaleOff').submit(function(){
+            var listItem = [];
+            eleList.find('option').each(function(){
+                listItem.push($(this).val());
+            });
+            eleList.val(listItem);
+        });
+    });
+
+
+
+    ]]>
+</script>

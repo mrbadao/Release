@@ -1,0 +1,109 @@
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:fillViewport="true"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        tools:context=".MainActivity">
+
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|bottom"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/login_logo" />
+
+            <EditText
+                android:id="@+id/txtLoginID"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="20dp"
+                android:gravity="top"
+                android:hint="Tài khoản của bạn"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/txtLoginPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:ems="10"
+                android:gravity="top"
+                android:hint="Mật khẩu của bạn"
+                android:inputType="textPassword"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/btnLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:singleLine="true"
+                android:text="Đăng nhập"
+                android:textAlignment="gravity" />
+
+            <ProgressBar
+                android:id="@+id/progressbarLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="5dp"
+                android:visibility="invisible" />
+            <TextView
+                android:id="@+id/txtCopyRight"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|bottom"
+                android:gravity="center"
+                android:text="Copyright © 2015 Hiếu Nguyễn. All Rights Reserved."
+                android:textAlignment="gravity"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textSize="11dp" />
+        </LinearLayout>
+
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:orientation="horizontal">-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/txtCopyRight"-->
+                <!-- -->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center_vertical|bottom"-->
+                <!--android:gravity="center"-->
+                <!--android:text="Copyright © 2015 Hiếu Nguyễn. All Rights Reserved."-->
+                <!--android:textAlignment="gravity"-->
+                <!--android:textAppearance="?android:attr/textAppearanceSmall"-->
+                <!--android:textSize="11dp" />-->
+        <!--</LinearLayout>-->
+
+    </RelativeLayout>
+
+</ScrollView>

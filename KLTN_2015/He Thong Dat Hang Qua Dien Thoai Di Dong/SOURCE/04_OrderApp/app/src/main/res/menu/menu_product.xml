@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="tk.order_sys.orderapp.ProductActivity">
+    <item
+        android:id="@+id/action_add_cart"
+        android:title="@string/action_cart_add"
+        android:icon="@drawable/shopping_cart"
+        app:showAsAction="always" />
+</menu>

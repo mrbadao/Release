@@ -1,0 +1,169 @@
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false&language=vi"></script>
+
+
+<h1>Phân phối đơn hàng</h1>
+<article>
+    <p>Để phân phối đơn hàng. Chọn đơn hàng và click vào nút Save.</p>
+</article>
+
+<div class="messageBox">
+    <p class="txtWarning">
+        <strong tal:condition="msg">Thao tác hoàn thành</strong>
+    </p>
+</div>
+
+<form name="frmSearch" action="/admin/staff/setorder?id=${contentStaff/id|''}" method="post">
+    <div class="mBoxitem_table">
+        <table class="tableTate" cellspacing="0" cellpadding="0" border="0">
+            <tr>
+                <th>Login Id</th>
+                <td tal:content="contentStaff/login_id">delivery_01</td>
+            </tr>
+
+            <tr>
+                <th>Tên nhân viên</th>
+                <td tal:content="contentStaff/name|''">delivery_01</td>
+            </tr>
+
+            <tr>
+                <th>Chọn đơn hàng</th>
+                <td>
+                    <div id="map_id" style="width:100%; height: 500px;"></div>
+                    <div id="marker_list"></div>
+                </td>
+            </tr>
+
+            <tr>
+                <th>Đơn hàng được chọn</th>
+                <td>
+                    <input type="hidden" name='id' value="${contentStaff/id|''}"/>
+                    <select id='second' style="display: none;">
+                        <option tal:repeat="item orders" value="${item/id|''}" orderAddress = "${item/customer_address|''}" orderLat = "${item/coordinate_lat|''}" orderLong = "${item/coordinate_long|''}">${item/name|''}</option>
+                    </select>
+                    <!--<div class="fAssist_row" tal:replace="">-->
+                        <!--<p class="fTextAssist_top"><strong>Chọn</strong></p>-->
+                        <!--<select name="" id='second2' multiple='multiple' size='8'>-->
+                        <!--</select>-->
+                    <!--</div>-->
+                    <div>
+                        <select name="order_id[]" id='chooseList' multiple='multiple' size='10' style="width: 220px;"></select>
+                    </div>
+                    <div>
+                        <button type="button" id="removeOrders">Xóa</button>
+                    </div>
+                    <div id="curr_address" style="margin-top: 5px;"><p></p></div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="BtnArea">
+        <div class="BtnAreaitem">
+            <input class="btnMiddle themeNormal" type="submit" title="Save" value="Save"/>
+        </div>
+        <div class="BtnAreaitem">
+            <input class="btnMiddle themeNormal" type="submit" title="Cancel" value="Cancel"
+                   onclick="location.href='/admin/staff/';"/>
+        </div>
+    </div>
+</form>
+
+<div class="mBoxitem_table" tal:condition="data">
+    <table cellpadding="0" cellspacing="0" border="0" class="tableYoko">
+        <thead>
+        <tr>
+            <th>Tên đơn hàng</th>
+            <th class="thYokoM">Tên khách hàng</th>
+            <th class="thYokoM">Số điện thoại</th>
+            <th>Địa chỉ</th>
+        </tr>
+        </thead>
+        <tr tal:repeat="orderdata data">
+            <td tal:content="orderdata/name"></td>
+            <td tal:content="orderdata/customer_name"></td>
+            <td tal:content="orderdata/order_phone"></td>
+            <td tal:content="orderdata/customer_address"></td>
+        </tr>
+    </table>
+</div>
+
+<link href="/admin/js/jmultiselect2side/jquery.multiselect2side.css" type="text/css" rel="stylesheet"/>
+<script type="text/javascript" src="/admin//js/jmultiselect2side/jquery.multiselect2side.js"></script>
+
+
+<script type="text/javascript">
+    var map;
+    var markerList = [];
+    var eleDataList = $('#second');
+    var markerData = [];
+    var eleChooseList = $('#chooseList');
+
+    eleDataList.find('option').each(function(){
+        var ele = $(this);
+        var item = {"mId": ele.val(),"title": ele.text(),"lat": ele.attr('orderLat'),"lng": ele.attr('orderLong')};
+        markerData.push(item);
+    });
+    console.log(markerData);
+
+    <![CDATA[
+    function initialize() {
+        var myLatlng;
+        if(markerData.length >0)
+            myLatlng = new google.maps.LatLng(markerData[0].lat, markerData[0].lng);
+        else
+            myLatlng = new google.maps.LatLng(10.8230989, 106.6296638);
+
+        var myOptions = {
+            zoom: 13,
+            center: myLatlng,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+
+        map = new google.maps.Map(document.getElementById("map_id"), myOptions);
+
+        for(var i=0; i< markerData.length; i++){
+           createMarker(new google.maps.LatLng(markerData[i].lat, markerData[i].lng),markerData[i].title, markerData[i].mId);
+        }
+    }
+
+    function createMarker(myLatlng, mTitle, mId){
+        var marker = new google.maps.Marker({
+            position: myLatlng,
+            map: map,
+            title: mTitle,
+            mId: mId
+        });
+
+        google.maps.event.addListener(marker, 'click', function() {
+            eleChooseList.append($("<option></option>")
+                    .attr({"value":marker.mId, "orderLat":marker.getPosition().lat(), "orderLong":marker.getPosition().lng()})
+                    .text(marker.title));
+            marker.setMap(null);
+        });
+
+        return marker;
+    }
+
+    $('#removeOrders').click(function(){
+        var chooseVal =eleChooseList.val();
+        for(var i=0; i< chooseVal.length; i++){
+            var ele = eleChooseList.find('option[value="'+chooseVal[i]+'"]');
+            createMarker(new google.maps.LatLng(ele.attr('orderLat'), ele.attr('orderLong')), ele.text(), ele.val());
+            ele.remove();
+            console.log('remove');
+        }
+    });
+
+    $('form[name=frmSearch]').submit(function(e){
+        var itemArr=[];
+        eleChooseList.find('option').each(function(){
+            itemArr.push($(this).val());
+        });
+        console.log(itemArr);
+        eleChooseList.val(itemArr);
+        return true;
+    });
+
+    google.maps.event.addDomListener(window, 'load', initialize);
+    ]]>
+</script>

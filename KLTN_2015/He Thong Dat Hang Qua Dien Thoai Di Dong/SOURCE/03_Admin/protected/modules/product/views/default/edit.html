@@ -1,0 +1,196 @@
+<form id="frmProduct" method="post" action="" enctype="multipart/form-data">
+    <div tal:condition="not:exists:contentProduct/id">
+        <h1>Thêm sản phẩm mới</h1>
+        <article>
+            <p>
+                Sản phẩm mới sẽ được thêm.<br/>
+                Sau khi nhập các thông tin cần thiết, bạn hãy click vào nút Save.
+            </p>
+        </article>
+    </div>
+    <div tal:condition="exists:contentProduct/id">
+        <h1>Chỉnh sửa sản phẩm</h1>
+        <article>
+            <p>
+                Sản phẩm sẽ được chỉnh sửa<br/>
+                Sau khi nhập các thông tin cần thiết, bạn hãy click vào nút Save.
+            </p>
+        </article>
+    </div>
+    <aside>
+        <p>※<span class="txtWarning">*</span>Hãy nhập đầy đủ thông tin.</p>
+    </aside>
+
+    <div class="columnContainer">
+        <div class="tabBox">
+            <input type="hidden" name="product[id]" value="${contentProduct/id|''}"/>
+
+            <div class="mBoxitem_table">
+                <table cellpadding="0" cellspacing="0" border="0" class="tableTate">
+                    <tr>
+                        <th>Tên sảm phẩm&nbsp;<span class="txtWarning">*</span></th>
+                        <td>
+                            <tal:block tal:content="structure php:CHtml::error(contentProduct,'name')"/>
+                            <input type="text" name="product[name]" maxlength="100" value="${contentProduct/name|''}"  class="txtbox title txt_en" style="width:300px;"/>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="mBoxitem_table">
+                <table cellpadding="0" cellspacing="0" border="0" class="tableTate">
+                    <tr>
+                        <th>Category&nbsp;<span class="txtWarning">*</span></th>
+                        <td>
+                            <tal:block tal:content="structure php:CHtml::error(contentProduct,'category_id')"/>
+                            <select name="product[category_id]">
+                                <option value="">Chọn danh mục</option>
+                                <option tal:repeat="cat contentCats" tal:attributes="selected php:cat['id'] == contentProduct['category_id'] ? 'selected' :'' " value="${cat/id}">${cat/name}</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Giá&nbsp;<span class="txtWarning">*</span></th>
+                        <td>
+                            <tal:block tal:content="structure php:CHtml::error(contentProduct,'price')"/>
+                            <input type="text" name="product[price]" maxlength="100" value="${contentProduct/price|''}"  class="txtbox title txt_en" style="width:200px;"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Tình trạng</th>
+                        <td>
+                            <select name="product[del_flg]">
+                                <option value="0" tal:attributes="selected php: contentProduct['del_flg'] == 0 ? 'selected' : ''">Đang bán</option>
+                                <option value="1" tal:attributes="selected php: contentProduct['del_flg'] == 1 ? 'selected' : ''">Ngừng bán</option>
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="mBoxitem_table">
+                <table cellpadding="0" cellspacing="0" border="0" class="tableTate">
+                    <tr>
+                        <th>Là combo ?</th>
+                        <td>
+                            <input type="checkbox" name="product[is_combo]" value="${contentProduct/is_combo|'0'}" tal:attributes="checked php: contentProduct['is_combo'] == 1 ? 'checked' : ''"/>
+                        </td>
+                    </tr>
+                    <tr id="combo_content" tal:attributes="style php:contentProduct['is_combo'] == 0 ? 'display:none' : ''">
+                        <th>Chọn sản phẩm</th>
+                        <td>
+                            <p tal:condition="comboError" class="txtWarning">Hãy chọn sản phẩm</p>
+                            <select>
+                                <option value="">Chọn sản phẩm</option>
+                                <option tal:repeat="item listProduct" value="${item/id|''}">${item/name}</option>
+                            </select>
+                            <button type="button" id="combo_add">Thêm</button>
+                        </td>
+                    </tr>
+
+                    <tr tal:attributes="style php: comboItems != null ? '' : 'display:none' " id="combo_list">
+                        <th>Combo item</th>
+                        <td>
+                            <div tal:condition="comboItems" tal:repeat="comboItem comboItems" style="width: 100%; margin-top: 3px; margin-bottom: 2px;">
+                                <input type="hidden" name="combo_items[]" value="${comboItem/rid|''}" class="txtbox title txt_en" style="width:150px;"/>
+                                <input type="number" name="combo_items_qty[]" value="${comboItem/qty|'1'}" class="txtbox title txt_en" style="width:50px;"/>
+                                <p style="width:150px; float: left">${comboItem/product_name|''}</p>
+                                <button type="button" style="margin-left: 5px;" onclick="delItem(this)">Xóa</button>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="mBoxitem_table">
+                    <table cellpadding="0" cellspacing="0" border="0" class="tableTate">
+                        <tr>
+                            <th>Thumbnail&nbsp;<span class="txtWarning">*</span></th>
+                            <td>
+                                <div>
+                                    <tal:block tal:content="structure php:CHtml::error(contentProduct,'thumbnail')"/>
+                                    <input type="file" name="silde1"/>
+                                </div>
+                                <div>
+                                    <img src="${contentProduct/thumbnail|''}" tal:condition="php:contentProduct['thumbnail'] !=null" style="width: 400px; margin-top: 20px;"/>
+                                </div>
+                            </td>
+                        </tr>
+
+
+
+                        <tr>
+                            <th>Miêu tả</th>
+                            <td>
+                                <textarea name="product[description]" class="txt_bigbox ckeditor txt_en">
+                                    ${contentProduct/description|''}
+                                </textarea>
+                            </td>
+                        </tr>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="BtnArea">
+        <div class="BtnAreaitem">
+            <tal:block class="BtnAreaitem" tal:content="structure php:CHtml::submitButton('Save',array('name' => 'commit','class'=>'btnMiddle themeNormal'))"/>
+            <input class="btnMiddle themeNormal" type="button" title="Cancel" value="Cancel" onclick="window.location.href='/admin/product/';"/>
+        </div>
+    </div>
+</form>
+
+<script>
+    <![CDATA[
+    var eleComboProducts = $('#combo_content select');
+    var frmProduct= $('#frmProduct');
+    var eleComboList= $('#combo_list td');
+
+    frmProduct.submit(function(){
+        eleComboList.find('div input').each(function(){
+            $(this).attr("value",$(this).attr('rid'));
+        });
+
+        var isCombo = $("input[name='product[is_combo]']").is(":checked") ? '1' : '0';
+        console.log($("input[name='product[is_combo]']").is(":checked"));
+
+        $("input[name='product[is_combo]']").val(isCombo);
+        return true;
+    });
+
+    $("input[name='product[is_combo]']").change(function() {
+        if(this.checked) {
+            $('#combo_content').show();
+        }else
+        {
+            $('#combo_content').hide();
+        }
+    });
+
+    $('#combo_add').click(function(){
+        var val=eleComboProducts.val();
+        var text=eleComboProducts.find('option:selected').text();
+        if(val != ''){
+            eleComboList.parent().show();
+            if(eleComboList.find('div input[value='+val+']').length < 1)
+                eleComboList.append(
+                        "<div style='width:100%; margin-top: 3px;  margin-bottom: 2px;'>" +
+                        "<input type='hidden' name='combo_items[]' value='"+val+"' class='txtbox title txt_en'/>" +
+                        "<p style='width:150px; float: left'>"+text+"</p>" +
+                        "<input type='number' name='combo_items_qty[]' value='1' class='txtbox title txt_en' style='width:50px;'/>" +
+                        "<button type='button' style='margin-left: 5px;' onclick='delItem(this)'>Xóa</button>" +
+                        "</div>"
+                );
+        }
+    });
+
+    function delItem(ele){
+        $(ele).parent().remove();
+        if(eleComboList.find('div').length < 1){
+            eleComboList.parent().hide();
+        }
+    }
+
+    ]]>
+</script>

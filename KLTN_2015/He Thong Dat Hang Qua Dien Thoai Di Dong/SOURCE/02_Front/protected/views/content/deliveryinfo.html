@@ -1,0 +1,91 @@
+<div class="container breadcrumb-wrapper">
+    <div class="row">
+        <div class="span12 breadcrumb"
+             metal:use-macro="${this/viewPath}/${this/id}/breadcrumb.html/${this/action/id}"></div>
+    </div>
+</div>
+
+<div role="main" class="container product-details">
+    <div class="row">
+        <div class="span12">
+            <div class="row">
+                <div class="products-view-nav row about" style="margin:0px;">
+                    <h5 style="margin: 3px;">Thông tin giao hàng</h5>
+                    <hr style="margin: 0.4em 0px;"/>
+                </div>
+
+                <div class="prod-info clearfix list-display about">
+                    <tal:block tal:content="structure page/content" tal:condition="page"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="container checkout">
+            <div class="row">
+                <div class="span12 checkout-list">
+                    <div class="row">
+                        <div class="span12 content-wrapper clearfix" style="border: 1px solid #ECECEC !important;">
+                            <div class="left-col">
+                                <h6 tal:condition="order" >Thông tin trạng thái đơn hàng</h6>
+                                <h6 tal:condition="hasError" >Không tồn tại đơn hàng</h6>
+
+                                <p tal:condition="order">
+                                    MS: ${order/name|''}
+                                </p>
+                                <p tal:condition="order">
+                                    Tên khách hàng: ${order/customer_name|''}
+                                </p>
+                                <p tal:condition="order">
+                                    Điện thoại: ${order/order_phone|''}
+                                </p>
+                                <p tal:condition="order">
+                                    Email: ${order/email|''}
+                                </p>
+
+                                <p tal:condition="order">
+                                    Ngày tạo: ${order/created|''}
+                                </p>
+
+                                <p tal:condition="php:order['status'] == 2 and order != null">
+                                    Ngày giao: ${order/completed|''}
+                                </p>
+
+                                <p tal:condition="php:order['status'] == 0 and order != null">
+                                    Trạng thái: Đang thực hiện
+                                </p>
+
+                                <p tal:condition="php:order['status'] == 1 and order != null">
+                                    Trạng thái: Đang giao
+                                </p>
+
+                                <p tal:condition="php:order['status'] == 2 and order != null">
+                                   Trạng thái: Đã giao
+                                </p>
+                            </div>
+                            <div class="right-col">
+
+                                <h6>Thông tin</h6>
+
+                                <form action="#" method="post" id="form-2">
+                                    <ul class="rr">
+                                        <li>
+                                            <label>
+                                                <input type="text" name="name" placeholder="Mã đơn hàng của bạn..."/>
+                                            </label>
+                                        </li>
+                                    </ul>
+
+                                    <a href="javascript:document.forms['form-2'].submit()" class="btn secondary">
+                                        <span class="gradient">Xem</span>
+                                    </a>
+                                </form>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
